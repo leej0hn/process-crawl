@@ -1,0 +1,11 @@
+logging:
+ file.path: ${user.home}/logs/process-craw-server
+ level.com.redscarf: DEBUG
+
+spring:
+ application.name: process-craw-server
+
+processon.userinfo:
+ uk:
+ fullName:
+ cookie:
