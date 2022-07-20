@@ -20,9 +20,25 @@ import java.util.Map;
 @Service
 public class ProcessOnService {
 
+    /**
+     * 获取未分享脑图的json数据
+     * 有时效性，要快，大概30秒
+     * @param id : 脑图uid
+     * @param tempId : 临时ID
+     * @param timeStamp : 时间戳
+     */
+    public JSONObject getPrivateMindMapJson(String id, String tempId, String timeStamp) {
+        String url = DIAGRAMING_DEF + "?template=false&id=" + id
+                + "&tempId=" + tempId
+                + "&_=" + timeStamp;
+        String jsonStr = OkHttpUtil.get(url);
+        //log.debug("脑图json : \n{}", jsonStr);
+        JSONObject jsonObj = JSONObject.parseObject(jsonStr);
+        return jsonObj.getJSONObject("def");
+    }
 
     /**
-     * 获取脑力的json数据
+     * 获取脑图的json数据
      *
      * @param id : 脑图uid
      */

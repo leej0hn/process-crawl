@@ -34,6 +34,46 @@ public class ProcessOnCrawlerTest extends BaseTest {
     }
 
     /**
+     * 获取未分享脑图的json数据
+     */
+    @Test
+    public void testGetPrivateMindMap() {
+        // 分享的url上有id
+        String id = "617b81ebf346fb01b918d499";
+        String tempId = "62d7c6577d9c085ba14421a4";
+        String time = "1658308184543";
+        JSONObject mindMapJson = processOnService.getPrivateMindMapJson(id, tempId, time);
+        log.info("mindMapJson : \n{}", mindMapJson);
+    }
+
+    /**
+     * 拷贝未分享指定的图到自己的文件中
+     */
+    @Test
+    public void testPrivateAction() {
+        // 获取需要拷贝的脑图json
+        String targetId = "617b81ebf346fb01b918d499";
+        String tempId = "62d7c72407912923e88864ad";
+        String time = "1658308388901";
+        JSONObject mindMapJson = processOnService.getPrivateMindMapJson(targetId, tempId, time);
+        log.info("需要拷贝的Json : \n{}", mindMapJson);
+        // 自己用来保存的 id
+        String actionId = "620cec841efad406e72e6b04";
+        JSONArray jsonArray = createAction.getJSONObject(0).getJSONObject("content").getJSONArray("content");
+        JSONArray children = mindMapJson.getJSONArray("children");
+        JSONArray leftChildren = mindMapJson.getJSONArray("leftChildren");
+        if (children != null && children.size() > 0) {
+            jsonArray.addAll(children);
+        }
+        if (leftChildren != null && leftChildren.size() > 0) {
+            jsonArray.addAll(leftChildren);
+        }
+        String msgStr = createAction.toJSONString();
+        // 保存到自己的脑图
+        processOnService.actionMindMap(actionId, msgStr, headers);
+    }
+
+    /**
      * 拷贝指定的图到自己的文件中
      */
     @Test
